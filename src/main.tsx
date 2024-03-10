@@ -7,14 +7,21 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material';
-import App from './components/layout/App';
 import { AppProvider } from './contexts/AppContext';
+import App from './components/layout/App';
+import Products from './components/pages/products/Products';
 
 const root = createRoot(document.getElementById('root')!);
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <App />
+        element: <App />,
+        children: [
+            {
+                index: true,
+                element: <Products />
+            }
+        ]
     }
 ]);
 const theme = createTheme({

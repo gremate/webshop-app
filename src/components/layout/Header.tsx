@@ -15,32 +15,32 @@ export default function Header(): JSX.Element {
     return (
         <header className="py-2">
             <Container>
-                <Row>
-                    <Col>
-                        <div className="d-flex align-items-center">
-                            <span className="fs-2">Webshop App</span>
-                            <div className="d-flex ms-auto fs-4">
-                                <div className="me-3">
-                                    <FormControlLabel
-                                        label="Admin"
-                                        control={
-                                            <Switch
-                                                checked={appState.user.isAdmin}
-                                                onChange={event =>
-                                                    dispatch({
-                                                        type: 'set_user',
-                                                        payload: { ...appState.user, isAdmin: event.target.checked }
-                                                    })
-                                                }
-                                            />
-                                        }
-                                        classes={{ label: 'fs-4' }}
-                                    />
-                                </div>
-                                <div>
-                                    <FontAwesomeIcon icon={faUser} className="me-1" />
-                                    {appState.user.name}
-                                </div>
+                <Row className="align-items-center">
+                    <Col xs="auto">
+                        <span className="fs-2">Webshop App</span>
+                    </Col>
+                    <Col xs="auto" className="ms-auto">
+                        <div className="d-flex fs-4">
+                            <div className="me-3">
+                                <FormControlLabel
+                                    label="Admin"
+                                    control={
+                                        <Switch
+                                            checked={appState.user.isAdmin}
+                                            onChange={event =>
+                                                dispatch({
+                                                    type: 'set_user',
+                                                    payload: { ...appState.user, isAdmin: event.target.checked }
+                                                })
+                                            }
+                                        />
+                                    }
+                                    classes={{ label: 'fs-4' }}
+                                />
+                            </div>
+                            <div>
+                                <FontAwesomeIcon icon={faUser} className="me-1" />
+                                {appState.user.name}
                             </div>
                         </div>
                     </Col>
