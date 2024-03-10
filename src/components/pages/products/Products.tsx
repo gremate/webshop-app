@@ -1,15 +1,34 @@
-import type { Category as CategoryType, Product } from '../../../types';
-import { useEffect, useState } from 'react';
+import type { Category as CategoryType, Product, Quantity } from '../../../types';
+import { useEffect, useMemo, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useAppDispatch } from '../../../contexts/AppContext';
 import useApi from '../../../hooks/useApi';
+import { isCategory } from '../../../utilities';
 import Category from './Category';
+import ShoppingCart from './ShoppingCart';
 
 export default function Products(): JSX.Element {
     const [categorizedProducts, setCategorizedProducts] = useState<CategoryType[]>([]);
-    const [addedProducts, setAddedProducts] = useState<{ [property: Product['id']]: number }>({});
+    const [addedProducts, setAddedProducts] = useState<Quantity>({});
+    const products = useMemo(() => {
+        const products: Product[] = [];
+
+        function addProductsFromCategory(category: CategoryType) {
+            category.children.forEach(x => {
+                if (isCategory(x)) {
+                    addProductsFromCategory(x);
+                } else {
+                    products.push(x);
+                }
+            });
+        }
+
+        categorizedProducts.forEach(x => addProductsFromCategory(x));
+
+        return products;
+    }, [categorizedProducts]);
     const dispatch = useAppDispatch();
     const { getProducts } = useApi();
 
@@ -18,6 +37,18 @@ export default function Products(): JSX.Element {
             ...prevAddedProducts,
             [product.id]: product.id in prevAddedProducts ? prevAddedProducts[product.id] + 1 : 1
         }));
+    }
+
+    function removeProduct(product: Product) {
+        setAddedProducts(prevAddedProducts => {
+            const newAddedProducts = { ...prevAddedProducts, [product.id]: prevAddedProducts[product.id] - 1 };
+
+            if (!newAddedProducts[product.id]) {
+                delete newAddedProducts[product.id];
+            }
+
+            return newAddedProducts;
+        });
     }
 
     useEffect(() => {
@@ -60,6 +91,7 @@ export default function Products(): JSX.Element {
                     </Col>
                 </Row>
             </Container>
+            <ShoppingCart addedProducts={addedProducts} products={products} onRemoveButtonClick={removeProduct} />
         </>
     );
 }
