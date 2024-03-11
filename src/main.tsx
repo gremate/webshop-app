@@ -42,6 +42,42 @@ const theme = createTheme({
                     }
                 }
             }
+        },
+        MuiSelect: {
+            styleOverrides: {
+                outlined: {
+                    color: 'white'
+                },
+                root: {
+                    backgroundColor: '#212121',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white !important'
+                    }
+                },
+                icon: {
+                    color: 'white'
+                }
+            }
+        },
+        MuiFormLabel: {
+            styleOverrides: {
+                root: {
+                    color: 'white !important'
+                }
+            }
+        },
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiInputBase-root': {
+                        color: 'white',
+                        backgroundColor: '#212121'
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'white !important'
+                    }
+                }
+            }
         }
     }
 });

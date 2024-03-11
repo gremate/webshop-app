@@ -16,7 +16,13 @@ export default function useApi() {
         function setProperties(category: Category) {
             category.parent = categories.find(x => x.name === category.name)!.parent;
 
-            category.children.filter(isCategory).forEach(setProperties);
+            category.children.forEach(x => {
+                if (isCategory(x)) {
+                    setProperties(x);
+                } else {
+                    x.parent = `${category.parent ? `${category.parent}/` : ''}${category.name}`;
+                }
+            });
         }
 
         axiosResponse.data.data.forEach(setProperties);

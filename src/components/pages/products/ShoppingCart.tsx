@@ -50,6 +50,7 @@ export default function ShoppingCart({ addedProducts, products, onRemoveButtonCl
                     </Row>
                 );
             })}
+            {!Object.keys(addedProducts).length && <p className="text-center mb-0">No products have been added yet.</p>}
             <Row className="mt-2">
                 <Col xs="auto">Total Cost</Col>
                 <Col xs="auto" className="ms-auto">

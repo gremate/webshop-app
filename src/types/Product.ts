@@ -3,4 +3,7 @@ export interface Product {
     name: string;
     price: number;
     type: 'PRODUCT';
+    parent: string;
 }
+
+export type ProductSortBy = 'name' | 'price';

@@ -10,9 +10,12 @@ import Product from './Product';
 interface CategoryProps {
     category: Category;
     addProduct: (product: ProductType) => void;
+    sort: (a: Category | ProductType, b: Category | ProductType) => number;
 }
 
-export default function Category({ category, addProduct }: CategoryProps): JSX.Element {
+export default function Category({ category, sort, addProduct }: CategoryProps): JSX.Element {
+    const sortedChildren = [...category.children].sort(sort);
+
     return (
         <Accordion disableGutters>
             <AccordionSummary expandIcon={<FontAwesomeIcon icon={faAngleDown} />}>
@@ -22,9 +25,9 @@ export default function Category({ category, addProduct }: CategoryProps): JSX.E
                 </div>
             </AccordionSummary>
             <AccordionDetails>
-                {category.children.map(x =>
+                {sortedChildren.map(x =>
                     isCategory(x) ? (
-                        <Category key={x.name} category={x} addProduct={addProduct} />
+                        <Category key={x.name} category={x} addProduct={addProduct} sort={sort} />
                     ) : (
                         <Product key={x.id} product={x} onAddButtonClick={addProduct} />
                     )
