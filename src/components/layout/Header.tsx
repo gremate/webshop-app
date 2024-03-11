@@ -1,4 +1,5 @@
 import '../../styles/header.scss';
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -17,10 +18,17 @@ export default function Header(): JSX.Element {
             <Container>
                 <Row className="align-items-center">
                     <Col xs="auto">
-                        <span className="fs-2">Webshop App</span>
+                        <Link to="/" className="fs-2">
+                            Webshop App
+                        </Link>
                     </Col>
                     <Col xs="auto" className="ms-auto">
                         <div className="d-flex fs-4">
+                            {appState.user.isAdmin && (
+                                <Link to="/admin" className="me-3">
+                                    Admin Page
+                                </Link>
+                            )}
                             <div className="me-3">
                                 <FormControlLabel
                                     label="Admin"

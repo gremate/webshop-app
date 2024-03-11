@@ -6,3 +6,5 @@ export interface Category {
     children: (Category | Product)[];
     parent: string;
 }
+
+export type NewCategory = Pick<Category, 'name' | 'parent'>;

@@ -11,6 +11,8 @@ import { AppProvider } from './contexts/AppContext';
 import { theme } from './constants';
 import App from './components/layout/App';
 import Products from './components/pages/products/Products';
+import Admin from './components/pages/admin/Admin';
+import SecureRoute from './components/common/SecureRoute';
 
 const root = createRoot(document.getElementById('root')!);
 const router = createBrowserRouter([
@@ -21,6 +23,14 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Products />
+            },
+            {
+                path: 'admin',
+                element: (
+                    <SecureRoute>
+                        <Admin />
+                    </SecureRoute>
+                )
             }
         ]
     }

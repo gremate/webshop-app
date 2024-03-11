@@ -7,3 +7,5 @@ export interface Product {
 }
 
 export type ProductSortBy = 'name' | 'price';
+
+export type NewProduct = Pick<Product, 'name' | 'parent'> & { price: string };

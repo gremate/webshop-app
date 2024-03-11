@@ -16,6 +16,14 @@ html {
         font-family: 'Roboto', sans-serif;
         background-color: #2d2d2d;
 
+        a {
+            color: white;
+
+            &:hover {
+                color: #b9b9b9;
+            }
+        }
+
         .white-space-pre-wrap {
             white-space: pre-wrap;
         }
