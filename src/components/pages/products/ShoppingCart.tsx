@@ -7,14 +7,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface ShoppingCartProps {
+    shoppingCartRef: React.RefObject<HTMLDivElement>;
     addedProducts: Quantity;
     products: Product[];
     onRemoveButtonClick: (product: Product) => void;
 }
 
-export default function ShoppingCart({ addedProducts, products, onRemoveButtonClick }: ShoppingCartProps): JSX.Element {
+export default function ShoppingCart({
+    shoppingCartRef,
+    addedProducts,
+    products,
+    onRemoveButtonClick
+}: ShoppingCartProps): JSX.Element {
     return (
         <Drawer
+            ref={shoppingCartRef}
             anchor="right"
             variant="permanent"
             sx={{

@@ -1,5 +1,5 @@
 import type { Category as CategoryType, Product as ProductType, ProductSortBy, Quantity } from '../../../types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -24,6 +24,7 @@ export default function Products(): JSX.Element {
     const [filter, setFilter] = useState('');
     const [sortBy, setSortBy] = useState<ProductSortBy>('name');
     const [shouldShowProductView, setShouldShowProductView] = useState(false);
+    const [containerPaddingRight, setContainerPaddingRight] = useState<number | null>(null);
     const products = useMemo(() => {
         const products: ProductType[] = [];
 
@@ -41,6 +42,8 @@ export default function Products(): JSX.Element {
 
         return products;
     }, [categorizedProducts]);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const shoppingCartRef = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch();
     const { getProducts } = useApi();
     const filteredSortedProducts = shouldShowProductView
@@ -117,9 +120,31 @@ export default function Products(): JSX.Element {
         };
     }, [dispatch, getProducts]);
 
+    useEffect(() => {
+        function onResize() {
+            if (containerRef.current && shoppingCartRef.current?.firstElementChild) {
+                const { right } = containerRef.current.getBoundingClientRect();
+                const { left } = shoppingCartRef.current.firstElementChild.getBoundingClientRect();
+                const difference = left - right;
+                const minDistance = 20;
+
+                setContainerPaddingRight(difference < minDistance ? Math.abs(difference) + minDistance : null);
+            }
+        }
+
+        window.addEventListener('resize', onResize);
+        onResize();
+
+        return () => {
+            window.removeEventListener('resize', onResize);
+        };
+    }, []);
+
     return (
         <>
-            <Container>
+            <Container
+                ref={containerRef}
+                style={containerPaddingRight ? { paddingRight: containerPaddingRight } : undefined}>
                 <Row>
                     <Col>
                         <Row className="align-items-center mb-4">
@@ -145,7 +170,7 @@ export default function Products(): JSX.Element {
                                         setShouldShowProductView(true);
                                     }}
                                 />
-                                <FormControl size="small">
+                                <FormControl size="small" sx={{ minWidth: 100 }}>
                                     <InputLabel id="sort-by-select-label">Sort By</InputLabel>
                                     <Select
                                         label="Sort By"
@@ -179,7 +204,12 @@ export default function Products(): JSX.Element {
                     </Col>
                 </Row>
             </Container>
-            <ShoppingCart addedProducts={addedProducts} products={products} onRemoveButtonClick={removeProduct} />
+            <ShoppingCart
+                shoppingCartRef={shoppingCartRef}
+                addedProducts={addedProducts}
+                products={products}
+                onRemoveButtonClick={removeProduct}
+            />
         </>
     );
 }
